@@ -2,9 +2,9 @@
 
 ## Purpose
 
-**autohooks.sh** is a Bash script that generates a MOZ_BUILD_HOOK file automatically for Mozilla builds. It detects which directories have changed between the current `HEAD` and a specified Git merge base (defaulting to `bookmarks/central`), and then disables compiler optimizations (`COMPILE_FLAGS["OPTIMIZE"] = []`) in those directories.
+**autohooks.sh** is a Bash script that generates a `MOZ_BUILD_HOOK` file automatically for Mozilla builds. It detects which directories have changed between the current `HEAD` and a specified Git merge base (defaulting to `bookmarks/central`), and then disables compiler optimizations (`COMPILE_FLAGS["OPTIMIZE"] = []`) in those directories.
 
-By selectively disabling optimizations where you’re actively working, you gain faster compile times and easier debugging, without needing to manually edit `moz.build` in each changed directory or adjust a MOZ_BUILD_HOOK file manually.
+By selectively disabling optimizations where you’re actively working, you gain faster compile times and easier debugging, without needing to manually edit `moz.build` in each changed directory or adjust a `MOZ_BUILD_HOOK` file manually.
 
 ---
 
@@ -85,7 +85,7 @@ By selectively disabling optimizations where you’re actively working, you gain
 ## When to Use autohooks.sh
 
 - You frequently switch between branches and need to disable optimizations in new or modified directories on each checkout.
-- You want to centralize all your “disable optimization” logic without editing individual `moz.build` files, or manually updating a MOZ_BUILD_HOOK file.
+- You want to centralize all your “disable optimization” logic without editing individual `moz.build` files, or manually updating a `MOZ_BUILD_HOOK` file.
 - You have a template of flags or commands you always want included (e.g., special debug flags).
 
 This script simplifies the process of selectively disabling optimization, letting you focus on development rather than manual build configuration.
