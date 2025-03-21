@@ -2,7 +2,7 @@
 
 ## Purpose
 
-**autohooks.sh** is a Bash script that generates a `MOZ_BUILD_HOOK` file automatically for Mozilla builds. It detects which directories have changed between the current `HEAD` and a specified Git merge base (defaulting to `bookmarks/central`), and then disables compiler optimizations (`COMPILE_FLAGS["OPTIMIZE"] = []`) in those directories.
+**autohooks.sh** is a Bash script that generates a `MOZ_BUILD_HOOK` file automatically for Mozilla builds. It detects which directories have changed between the current `HEAD`/`tip` and a specified `git` merge base (defaulting to `bookmarks/central`) or hg revision, and then disables compiler optimizations (`COMPILE_FLAGS["OPTIMIZE"] = []`) in those directories.
 
 By selectively disabling optimizations where you’re actively working, you gain faster compile times and easier debugging, without needing to manually edit `moz.build` in each changed directory or adjust a `MOZ_BUILD_HOOK` file manually.
 
@@ -12,17 +12,18 @@ By selectively disabling optimizations where you’re actively working, you gain
 
 1. **Make the script executable**:
 
-    `chmod +x /path/to/autohooks.sh`
+   `chmod +x /path/to/autohooks.sh`
 
 2. **Add to your `.mozconfig`**:
 
-    `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh)`
+   `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh)`
 
    This uses `bookmarks/central` as the merge base by default.
 
 ---
 
 ## Usage
+
 ```bash
     autohooks.sh [-h] [-b <MERGE_BASE>] [-t <TEMPLATE>]
 
@@ -62,23 +63,27 @@ By selectively disabling optimizations where you’re actively working, you gain
 
 ## How It Works
 
-1. **Detect Changed Directories**  
-   The script uses:
+1.  **Detect Changed Directories**  
+    The script uses either:
 
-       git diff --name-only <merge-base> HEAD
+        git diff --name-only <merge-base> HEAD
 
-   to find modified files, then checks if their directories contain a `moz.build` file.
+    or
 
-2. **Disable Optimization**  
-   For each directory with changes, the script appends:
-```
-       if RELATIVEDIR.startswith("<directory>"):
-           COMPILE_FLAGS["OPTIMIZE"] = []
-```
-   to a temporary hooks file.
+        hg status -n --rev <merge-base>:"last(outgoing())"
 
-3. **Reuse or Create Hooks File**  
-   If an existing hooks file in `/tmp` is identical to the new one, the script reuses it; otherwise, it saves the new file under a name based on the merge base. Finally, it prints the file path for `MOZ_BUILD_HOOK` to pick up.
+    to find modified files, then checks if their directories contain a `moz.build` file.
+
+2.  **Disable Optimization**  
+    For each directory with changes, the script appends:
+
+        if RELATIVEDIR.startswith("<directory>"):
+            COMPILE_FLAGS["OPTIMIZE"] = []
+
+    to a temporary hooks file.
+
+3.  **Reuse or Create Hooks File**  
+    If an existing hooks file in `/tmp` is identical to the new one, the script reuses it; otherwise, it saves the new file under a name based on the merge base. Finally, it prints the file path for `MOZ_BUILD_HOOK` to pick up.
 
 ---
 
@@ -89,5 +94,3 @@ By selectively disabling optimizations where you’re actively working, you gain
 - You have a template of flags or commands you always want included (e.g., special debug flags).
 
 This script simplifies the process of selectively disabling optimization, letting you focus on development rather than manual build configuration.
-
-
