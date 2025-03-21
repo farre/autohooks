@@ -20,7 +20,6 @@ elif [ -d .hg ] || hg root >/dev/null 2>&1; then
 base=$(hg log -r "${mergebase-parents(first(outgoing()))}" --template '{node}\n')
 files=$(hg status -n --rev "${base}":"last(outgoing())")
 fi
-
 directories=$(for file in $files; do
   directory=$(dirname $file)
   if [ -f "${directory}/moz.build" ];  then
