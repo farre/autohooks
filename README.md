@@ -38,25 +38,25 @@ By selectively disabling optimizations where you’re actively working, you gain
 
 - **Default**:
 
-      `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh)`
+      ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh)
 
   Uses `bookmarks/central` as the merge base.
 
 - **Custom Merge Base**:
 
-      `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -b mybranch)`
+      ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -b mybranch)
 
   Disables optimization in directories changed between `HEAD` and `mybranch`.
 
 - **Adding a Template**:
 
-      `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -t /path/to/template_hooks.txt)`
+      ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -t /path/to/template_hooks.txt)
 
   Prepends custom flags or logic from `template_hooks.txt` to the generated hooks file.
 
 - **Combine Both**:
 
-      `ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -t /path/to/template_hooks.txt -b mybranch)`
+      ac_add_options MOZ_BUILD_HOOK=$(/path/to/autohooks.sh -t /path/to/template_hooks.txt -b mybranch)
 
 ---
 
@@ -65,7 +65,7 @@ By selectively disabling optimizations where you’re actively working, you gain
 1. **Detect Changed Directories**  
    The script uses:
 
-       `git diff --name-only <merge-base> HEAD`
+       git diff --name-only <merge-base> HEAD
 
    to find modified files, then checks if their directories contain a `moz.build` file.
 
